@@ -1,0 +1,35 @@
+.bob {
+  /*border-right: 1px solid grey*/
+  background-color: #f9f9f9;
+  /*min-height: 400px !important;*/
+}
+
+label {
+  /*font-size: 2em !important;*/
+  /*align-items: center;*/
+  margin-top: -.55em !important;
+  margin-bottom: -.55em !important;
+  /*height: 20px*/
+}
+
+form {
+  /*display: inline-flex;;*/
+  margin-top: 1em
+}
+
+.close {
+    margin-top: -1em;
+    margin-right: -.7em;
+}
+
+.completed {
+  color: blue;
+}
+
+.card h3 {
+  margin: 0px;
+}
+
+.card {
+  /*margin: 1em*/
+}
