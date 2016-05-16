@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  doneHeight();
   addListeners();
   tutorial();
   renderTasks();
@@ -130,4 +131,14 @@ function save(tasks){
 function addListeners() {
   $('form').on('submit', addTask);
   $('.task-list').delegate('button.close', 'click', deleteTask);
+  $('.task-list').delegate('.task', 'mouseenter', showCloseButton);
+  $('.task-list').delegate('.task', 'mouseleave', hideCloseButton);
+}
+
+function hideCloseButton(e) { $(e.target).find('button').hide(); }
+function showCloseButton(e) { $(e.target).find('button').show(); }
+
+function doneHeight() {
+  var height = window.innerHeight * 0.7;
+  $('#done').css('min-height', height);
 }

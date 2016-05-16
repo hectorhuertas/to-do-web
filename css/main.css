@@ -1,3 +1,7 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 .done {
   background-color: #f9f9f9;
 }
@@ -5,10 +9,11 @@
 label {
   margin-top: -.55em !important;
   margin-bottom: -.55em !important;
+  color: #2980b9;
 }
 
 form {
-  margin-top: 1em
+  margin-top: 1em;
 }
 
 .close {
@@ -19,8 +24,9 @@ form {
 .task {
   cursor: move;
 }
-#done {
-  min-height: 300px
+
+.task-list {
+  padding-top: 1em;
 }
 
 #done h3 {
@@ -38,4 +44,8 @@ form {
 
 .card h3 {
   margin: 0px;
+}
+
+button.close {
+  display: none;
 }
