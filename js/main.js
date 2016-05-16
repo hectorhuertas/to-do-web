@@ -1,67 +1,133 @@
 $(document).ready(function () {
-  $('form').on('submit', addTask);
-  $('#pending').delegate('button.close', 'click', deleteTask);
-
-  loadTasks();
+  addListeners();
+  tutorial();
+  renderTasks();
 });
 
-var drake = dragula([document.querySelector('#pending'), document.querySelector('#completed')])
-drake.on('drop', function (a,b,c) {
+var drake = dragula([ document.querySelector('#pending'),
+  document.querySelector('#done')],
+{
+  accepts: function (el, target, source, sibling) { return target !== source; }
+});
+drake.on('drop', function (el,container) {
   // debugger
-  $(a).removeClass('col-xs-6')
-  $(a).addClass('col-xs-12')
+  // $(el).toggleClass('done')
+  var tasks = load();
+
+  var index = tasks.findIndex(function (elem) {
+    return elem.id === el.id;
+  });
+  var current = tasks[index].status;
+  tasks[index].status = current === 'done' ? 'pending' : 'done';
+  save(tasks);
+  // debugger
   console.log('janduriel');
-})
+});
+
+drake.on('over', function (el,container) {
+  container.id === 'done' ? bigSize(el) : smallSize(el);
+});
+
+function bigSize(el) { $(el).removeClass('col-xs-6').addClass('col-xs-12'); }
+function smallSize(el) { $(el).removeClass('col-xs-12').addClass('col-xs-6'); }
 
 function deleteTask(e) {
-  var tasks = JSON.parse(localStorage.tasks || '{}');
-  var id = $(e.target).closest('.task').attr('id')
-  delete tasks[id]
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-  console.log('delete');
-  $(e.target).closest('.task').remove();
+  var tasks = load();
+  $task = $(e.target).closest('.task');
+
+  var index = tasks.findIndex(function (el) {
+    return el.id === $task.attr('id');
+  });
+  tasks.splice(index,1);
+  save(tasks);
+
+  $task.remove();
 }
 
-function loadTasks() {
-  var tasks = JSON.parse(localStorage.tasks || '{}');
-  html = '';
-  for (var task in tasks) {
-    // debugger
-    html = html + taskHtml(tasks[task]);
+function renderTasks() {
+  var tasks = load();
+  var pending = '';
+  var done = '';
+
+  for (var i = 0; i < tasks.length; i++) {
+    if (tasks[i].status === 'done') {
+      done = done + taskHtml(tasks[i]);
+    } else {
+      pending = pending + taskHtml(tasks[i]);
+    }
   }
-  $('#pending').append(html);
+  $('#pending').append(pending);
+  $('#done').append(done);
 }
 
 function addTask(e) {
   e.preventDefault();
   var $input = $(e.target).find('input');
   var text = $input.val();
+  var task = {
+    id: slugify(text),
+    text: text,
+    status: 'pending'
+  };
 
-  // debugger
-  saveTask(text);
+  var tasks = load();
+  tasks.push(task);
+  save(tasks);
 
-  $('#pending').append(taskHtml(text));
+  $('#pending').append(taskHtml(task));
   $input.val('');
 }
 
-function saveTask(text) {
-  var tasks = JSON.parse(localStorage.tasks || '{}');
-  tasks[slugify(text)] = text;
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-  // debugger
-}
-
-function taskHtml(text){
-  return  '<div id="' + slugify(text) + '"class="task col-xs-6" draggable="true">' +
-            '<div class="card card-block card-warning card-inverse">' +
+function taskHtml(task){
+  var done = task.status === 'done';
+  var size = (done ? '12' : '6');
+  return  '<div id="' + task.id + '"class="task col-xs-' + size + '">' +
+            '<div class="card card-block card-' + randomColor() + ' card-inverse">' +
               '<button class="close"><span>&times;</span></button>' +
-              '<h3 class="card-title">' + text + '</h3>' +
+              '<h3 class="card-title">' + task.text + '</h3>' +
             '</div>' +
           '</div>';
+}
+
+function randomColor() {
+  var colors = ['success', 'primary', 'info', 'danger', 'warning'];
+  var random = Math.floor(Math.random() * colors.length);
+  return colors[random];
 }
 
 function slugify(text){
   return text.toString().toLowerCase().trim()
     .replace(/&/g, '-and-')
     .replace(/[\s\W-]+/g, '-');
+}
+
+function tutorial() {
+  if (!('tasks' in localStorage)) {
+    var tasks = [
+      {
+        id: 'completing',
+        text: 'Complete this task by dragging it to the "Done" panel.',
+        status: 'pending'
+      },
+      {
+        id: 'deleting',
+        text: 'Delete this task by clicking the button in the top right.',
+        status: 'done'
+      }
+    ];
+    save(tasks);
+  }
+}
+
+function load(){
+  return JSON.parse(localStorage.tasks);
+}
+
+function save(tasks){
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function addListeners() {
+  $('form').on('submit', addTask);
+  $('.task-list').delegate('button.close', 'click', deleteTask);
 }

@@ -1,19 +1,13 @@
-.bob {
-  /*border-right: 1px solid grey*/
+.done {
   background-color: #f9f9f9;
-  /*min-height: 400px !important;*/
 }
 
 label {
-  /*font-size: 2em !important;*/
-  /*align-items: center;*/
   margin-top: -.55em !important;
   margin-bottom: -.55em !important;
-  /*height: 20px*/
 }
 
 form {
-  /*display: inline-flex;;*/
   margin-top: 1em
 }
 
@@ -25,15 +19,23 @@ form {
 .task {
   cursor: move;
 }
+#done {
+  min-height: 300px
+}
 
-.completed {
-  color: blue;
+#done h3 {
+  color: #2980b9 !important;
+}
+.done h1 {
+  color: #27ae60 !important;
+}
+
+#done .card {
+  color: blue !important;
+  background-color: white;
+  border-color: white;
 }
 
 .card h3 {
   margin: 0px;
-}
-
-.card {
-  /*margin: 1em*/
 }
