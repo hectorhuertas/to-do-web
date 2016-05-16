@@ -5,7 +5,13 @@ $(document).ready(function () {
   loadTasks();
 });
 
-dragula([document.querySelector('#pending'), document.querySelector('#completed')])
+var drake = dragula([document.querySelector('#pending'), document.querySelector('#completed')])
+drake.on('drop', function (a,b,c) {
+  // debugger
+  $(a).removeClass('col-xs-6')
+  $(a).addClass('col-xs-12')
+  console.log('janduriel');
+})
 
 function deleteTask(e) {
   var tasks = JSON.parse(localStorage.tasks || '{}');
