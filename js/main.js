@@ -68,7 +68,8 @@ function addTask(e) {
   var task = {
     id: slugify(text),
     text: text,
-    status: 'pending'
+    status: 'pending',
+    color: randomColor()
   };
 
   var tasks = load();
@@ -83,7 +84,7 @@ function taskHtml(task){
   var done = task.status === 'done';
   var size = (done ? '12' : '6');
   return  '<div id="' + task.id + '"class="task col-xs-' + size + '">' +
-            '<div class="card card-block card-' + randomColor() + ' card-inverse">' +
+            '<div class="card card-block card-' + task.color + ' card-inverse">' +
               '<button class="close"><span>&times;</span></button>' +
               '<h3 class="card-title">' + task.text + '</h3>' +
             '</div>' +
@@ -108,12 +109,14 @@ function tutorial() {
       {
         id: 'completing',
         text: 'Complete this task by dragging it to the "Done" panel.',
-        status: 'pending'
+        status: 'pending',
+        color: 'info'
       },
       {
         id: 'deleting',
         text: 'Delete this task by clicking the button in the top right.',
-        status: 'done'
+        status: 'done',
+        color: 'success'
       }
     ];
     save(tasks);
