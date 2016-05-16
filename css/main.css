@@ -22,6 +22,10 @@ form {
     margin-right: -.7em;
 }
 
+.task {
+  cursor: move;
+}
+
 .completed {
   color: blue;
 }

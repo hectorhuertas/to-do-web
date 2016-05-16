@@ -5,8 +5,13 @@ $(document).ready(function () {
   loadTasks();
 });
 
+dragula([document.querySelector('#pending'), document.querySelector('#completed')])
+
 function deleteTask(e) {
-  // debugger
+  var tasks = JSON.parse(localStorage.tasks || '{}');
+  var id = $(e.target).closest('.task').attr('id')
+  delete tasks[id]
+  localStorage.setItem('tasks', JSON.stringify(tasks));
   console.log('delete');
   $(e.target).closest('.task').remove();
 }
@@ -41,7 +46,7 @@ function saveTask(text) {
 }
 
 function taskHtml(text){
-  return  '<div id="' + slugify(text) + '"class="task col-xs-6">' +
+  return  '<div id="' + slugify(text) + '"class="task col-xs-6" draggable="true">' +
             '<div class="card card-block card-warning card-inverse">' +
               '<button class="close"><span>&times;</span></button>' +
               '<h3 class="card-title">' + text + '</h3>' +
