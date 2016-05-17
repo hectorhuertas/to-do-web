@@ -5,24 +5,22 @@ $(document).ready(function () {
   renderTasks();
 });
 
-var drake = dragula([ document.querySelector('#pending'),
-  document.querySelector('#done')],
+var drake = dragula([
+  document.querySelector('#pending'),
+  document.querySelector('#done')
+],
 {
   accepts: function (el, target, source, sibling) { return target !== source; }
 });
+
 drake.on('drop', function (el,container) {
-  // debugger
-  // $(el).toggleClass('done')
   var tasks = load();
 
-  var index = tasks.findIndex(function (elem) {
-    return elem.id === el.id;
-  });
+  var index = tasks.findIndex(function (elem) { return elem.id === el.id; });
   var current = tasks[index].status;
   tasks[index].status = current === 'done' ? 'pending' : 'done';
+
   save(tasks);
-  // debugger
-  console.log('janduriel');
 });
 
 drake.on('over', function (el,container) {
@@ -59,6 +57,12 @@ function renderTasks() {
   }
   $('#pending').append(pending);
   $('#done').append(done);
+
+  $('.task').each(resize);
+}
+
+function resize(index, el) {
+  if ($(el).text().length > 35) { $(el).find('h3').css('font-size', '0.9em'); }
 }
 
 function addTask(e) {
@@ -78,6 +82,7 @@ function addTask(e) {
 
   $('#pending').append(taskHtml(task));
   $input.val('');
+  $('.task').each(resize);
 }
 
 function taskHtml(task){
@@ -123,13 +128,9 @@ function tutorial() {
   }
 }
 
-function load(){
-  return JSON.parse(localStorage.tasks);
-}
+function load(){ return JSON.parse(localStorage.tasks); }
 
-function save(tasks){
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
+function save(tasks){ localStorage.setItem('tasks', JSON.stringify(tasks)); }
 
 function addListeners() {
   $('form').on('submit', addTask);
